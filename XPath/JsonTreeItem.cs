@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace XPath2Json
+namespace XPath2Json.XPath
 {
     class JsonTreeItem : JsonItem
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.XPath;
 
-namespace XPath2Json
+namespace XPath2Json.XPath
 {
 	/// <summary>
 	/// Abstract class that defines behaviour of the XPath navigator positioned on a specific item

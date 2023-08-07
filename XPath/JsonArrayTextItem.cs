@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace XPath2Json
+namespace XPath2Json.XPath
 {
 	class JsonArrayTextItem : JsonItem
 	{

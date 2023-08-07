@@ -8,7 +8,7 @@ using System.Xml;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
 
-namespace XPath2Json
+namespace XPath2Json.XPath
 {
 	/// <summary>
 	/// Base class for XPath items, representing file system items: directories and files

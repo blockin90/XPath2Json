@@ -46,14 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JsonArrayTextItem.cs" />
-    <Compile Include="JsonTextItem.cs" />
-    <Compile Include="JsonRootTreeItem.cs" />
-    <Compile Include="JsonTreeItem.cs" />
-    <Compile Include="JsonElementtem.cs" />
-    <Compile Include="JsonItem.cs" />
-    <Compile Include="JsonXPathNavigator.cs" />
-    <Compile Include="XPathItem.cs" />
+    <Compile Include="XPath\JsonArrayTextItem.cs" />
+    <Compile Include="XPath\JsonTextItem.cs" />
+    <Compile Include="XPath\JsonRootTreeItem.cs" />
+    <Compile Include="XPath\JsonTreeItem.cs" />
+    <Compile Include="XPath\JsonElementtem.cs" />
+    <Compile Include="XPath\JsonItem.cs" />
+    <Compile Include="XPath\JsonXPathNavigator.cs" />
+    <Compile Include="XPath\XPathItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

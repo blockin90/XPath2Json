@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Xml.XPath;
 
-namespace XPath2Json
+namespace XPath2Json.XPath
 {
 	class JsonElementtem : JsonItem
 	{

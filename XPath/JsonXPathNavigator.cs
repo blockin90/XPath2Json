@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Xml.XPath;
 
-namespace XPath2Json
+namespace XPath2Json.XPath
 {
 	public class JsonXPathNavigator : XPathNavigator
 	{

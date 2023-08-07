@@ -8,7 +8,7 @@ using System.Text;
 using System.Xml;
 using System.Xml.XPath;
 
-namespace XPath2Json
+namespace XPath2Json.XPath
 {
 	class JsonTextItem : JsonItem
 	{
