@@ -1,0 +1,41 @@
+<testRoot>
+  <cars>test</cars>
+  <cars>test2</cars>
+  <objArray>
+    <field1 />
+    <field2>value1</field2>
+  </objArray>
+  <objArray>
+    <field1>5</field1>
+    <field2>value2</field2>
+    <innerArray>
+      <field1>5</field1>
+      <field2>value1</field2>
+    </innerArray>
+  </objArray>
+  <objArray>
+    <field1>3</field1>
+    <field2>value2</field2>
+  </objArray>
+  <objArray>
+    <field1>4</field1>
+    <field2>value2</field2>
+  </objArray>
+  <objArray>
+    <field1>5</field1>
+    <field2>value2</field2>
+    <innerArray>
+      <field1>3</field1>
+      <field2>value2</field2>
+    </innerArray>
+    <innerArray>
+      <field1>5</field1>
+      <field2>value5</field2>
+    </innerArray>
+    <innerArray>
+      <field1>3</field1>
+      <field2>value5</field2>
+    </innerArray>
+  </objArray>
+  <field2>scalarValue</field2>
+</testRoot>

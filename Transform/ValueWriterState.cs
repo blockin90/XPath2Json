@@ -47,6 +47,7 @@ namespace XPath2Json.Transform
                         break;
                     default:
                         _context.JsonTextWriter.WriteRawValue($"\"{text}\"");
+                        //_context.JsonTextWriter.WriteRawValue(text);
                         break;
                 }
             }

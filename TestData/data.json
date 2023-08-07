@@ -1,0 +1,47 @@
+﻿{
+  "cars": [ "test","test2" ],
+  "objArray": [
+    {
+      "field1": null,
+      "field2": "value1"
+    },
+    {
+      "field1": 5.00,
+      "field2": "value2",
+      "innerArray": [
+        {
+          "field1": 5,
+          "field2": "value1"
+        }
+      ]
+    },
+    {
+      "field1": 3,
+      "field2": "value2"
+    },
+    {
+      "field1": 4,
+      "field2": "value2"
+    },
+    {
+      "field1": 5,
+      "field2": "value2",
+      "innerArray": [
+        {
+          "field1": 3,
+          "field2": "value2"
+        },
+        {
+          "field1": 5,
+          "field2": "value5"
+        },
+        {
+          "field1": 3,
+          "field2": "value5"
+        }
+      ]
+
+    }
+  ],
+  "field2": "scalarValue"
+}

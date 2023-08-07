@@ -7,15 +7,20 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.IO;
 
 namespace XPath2Json.Transform
 {
-    class XslJsonWriter : XmlWriter
+    public class XslJsonWriter : XmlWriter
     {
         JsonWriterContext context;
         public XslJsonWriter()
         {
             context = new JsonWriterContext();
+        }
+        public XslJsonWriter(StreamWriter writer)
+        {
+            context = new JsonWriterContext(writer);
         }
 
         public override string LookupPrefix(string ns)
@@ -27,8 +32,10 @@ namespace XPath2Json.Transform
         {
             while (context.CurrentState != null) {
                 if (!(context.CurrentState is PropertyWriterState)) {
-                    context.JsonTextWriter.WriteEnd();
-                    context.MoveToPreviousState();
+                    context.CurrentState.WriteEndElement();
+
+                    //context.JsonTextWriter.WriteEnd();
+                    //context.MoveToPreviousState();
                 }
             }
             context.JsonTextWriter.Flush();

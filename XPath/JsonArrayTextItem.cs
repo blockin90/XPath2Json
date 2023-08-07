@@ -5,8 +5,9 @@ namespace XPath2Json.XPath
 	class JsonArrayTextItem : JsonItem
 	{
 		private readonly JValue _value;
+		JsonTextItem child = null;
 
-		public JsonArrayTextItem(JValue property, XPathItem parent = null) : base(parent)
+        public JsonArrayTextItem(JValue property, XPathItem parent = null) : base(parent)
 		{
 			_value = property;
 		}
@@ -19,9 +20,11 @@ namespace XPath2Json.XPath
 		public override XPathItem MoveToFirstChild()
 		{
 			if (!IsEmptyElement) {
-				return new JsonTextItem(_value, this);
+				if(child == null) {
+                    return new JsonTextItem(_value, this);
+                }
 			} 
-			return null;
+			return child;
 		}
 
         public override string Value

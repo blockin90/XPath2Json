@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace XPath2Json.Transform
 {
@@ -10,7 +11,6 @@ namespace XPath2Json.Transform
         { 
             get;
         }
-        //internal Stack<JsonWriterState> JsonWriterStates { get; }
 
         public JsonWriterState CurrentState { get; set; }
         public JsonWriterContext()
@@ -19,7 +19,14 @@ namespace XPath2Json.Transform
 #if DEBUG
             JsonTextWriter.Formatting = Formatting.Indented;
 #endif
-            //JsonWriterStates = new Stack<JsonWriterState>();
+            MoveToNextState(ObjectWriterState.CreateRoot(this));
+        }
+        public JsonWriterContext(TextWriter writer)
+        {
+            JsonTextWriter = new JsonTextWriter(writer);
+#if DEBUG
+            JsonTextWriter.Formatting = Formatting.Indented;
+#endif
             MoveToNextState(ObjectWriterState.CreateRoot(this));
         }
         public JsonWriterState MoveToNextState(JsonWriterState newState)

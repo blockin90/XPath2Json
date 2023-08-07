@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.IO;
+using System.Xml;
 using System.Xml.XPath;
 
 namespace XPath2Json.XPath
@@ -9,6 +10,8 @@ namespace XPath2Json.XPath
 	{
 		private XPathItem _rootItem;
 		private JObject _json;
+
+		NameTable nameTable = new NameTable();
 
         public JsonXPathNavigator(JObject json)
 		{
@@ -21,6 +24,7 @@ namespace XPath2Json.XPath
 		{
 			_rootItem = navigator._rootItem;
             _json = navigator._json;
+			nameTable = navigator.nameTable;
         }
 
 		public override string BaseURI
@@ -119,7 +123,7 @@ namespace XPath2Json.XPath
 
 		public override System.Xml.XmlNameTable NameTable
 		{
-			get { return null; }
+			get { return nameTable; }
 		}
 
 		public override string NamespaceURI

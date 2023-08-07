@@ -7,6 +7,7 @@ using System.Xml.XPath;
 using System.Xml;
 using Newtonsoft.Json.Linq;
 using System.Diagnostics;
+using System.Reflection.Emit;
 
 namespace XPath2Json.XPath
 {
@@ -41,9 +42,9 @@ namespace XPath2Json.XPath
 			{
                 string name;
                 if (JToken.Parent is JArray) {
-					name = (JToken.Parent.Parent as JProperty).Name;
+					name = ((JProperty)JToken.Parent.Parent).Name;
                 } else if(JToken is JObject) {
-					name = (JToken.Parent as JProperty).Name;
+					name = ((JProperty)JToken.Parent).Name;
 				} else if(JToken is JProperty) {
 					name = ((JProperty)JToken).Name;
 				} else {					

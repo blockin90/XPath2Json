@@ -9,7 +9,8 @@ namespace XPath2Json.XPath
     class JsonTreeItem : JsonItem
     {
         protected readonly JToken _token;
-        protected JToken[] _children = new JToken[0];
+        protected JToken[] _children = null;
+        protected XPathItem[] _wrappedChildren = null;
         protected int _childIndex;
 
         public JsonTreeItem(JToken token, XPathItem parent = null) : base(parent)
@@ -31,8 +32,7 @@ namespace XPath2Json.XPath
         {
             InitChildren();
             if (_children.Length > 0) {
-                var current = _children[_childIndex];
-                return CreateItem(current);
+                return GetWrappedChild(_childIndex);
             }
             return null;
         }
@@ -57,23 +57,26 @@ namespace XPath2Json.XPath
 
         protected virtual void InitChildren()
         {
-            if( _token is JObject) { //для массивов
-                _children = GetJObjectChildrens((JObject)_token);
-            } else if (_token is JProperty && _token.First is JObject) {
-                List<JToken> children = new List<JToken>();
-                foreach (var child in _token.First.Children()) {
-                    if (child is JArray) {
-                        children.AddRange(child.Children());
-                    } else {
-                        children.Add(child);
+            if (_children == null) {
+                if (_token is JObject) { //для массивов
+                    _children = GetJObjectChildrens((JObject)_token);
+                } else if (_token is JProperty && _token.First is JObject) {
+                    List<JToken> children = new List<JToken>();
+                    foreach (var child in _token.First.Children()) {
+                        if (child is JArray) {
+                            children.AddRange(child.Children());
+                        } else {
+                            children.Add(child);
+                        }
                     }
+                    _children = children.ToArray();
+                } else if (_token is JProperty && _token.First is JArray) {
+                    _children = _token.First.Children().ToArray();
+                } else {
+                    _children = _token.Children().Cast<JProperty>().ToArray();
                 }
-                _children = children.ToArray();
-            } 
-            else if (_token is JProperty && _token.First is JArray) {
-                _children = _token.First.Children().ToArray();
-            } else {
-                _children = _token.Children().Cast<JProperty>().ToArray();
+
+                _wrappedChildren = new JsonItem[_children.Length];
             }
             _childIndex = 0;
         }
@@ -113,11 +116,22 @@ namespace XPath2Json.XPath
             }
         }
 
+        XPathItem GetWrappedChild(int index)
+        {
+            var wrappedChild = _wrappedChildren[index];
+            if (wrappedChild == null) {
+                wrappedChild = CreateItem(_children[index]);
+                _wrappedChildren[index] = wrappedChild;
+            }
+            return wrappedChild;
+        }
+
         public XPathItem GetNext()
         {
             if (_childIndex >= _children.Length - 1)
                 return null;
-            return CreateItem(_children[++_childIndex]);
+            return GetWrappedChild(++_childIndex);
+            
         }
 
         internal XPathItem GetPrevious()

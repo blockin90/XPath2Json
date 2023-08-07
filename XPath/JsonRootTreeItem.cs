@@ -15,7 +15,10 @@ namespace XPath2Json.XPath
 
         protected override void InitChildren()
         {
-            _children = GetJObjectChildrens((JObject)_token);
+            if (_children == null) {
+                _children = GetJObjectChildrens((JObject)_token);
+                _wrappedChildren = new XPathItem[_children.Length];
+            }
             _childIndex = 0;
         }
 
