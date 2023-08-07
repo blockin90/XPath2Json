@@ -46,6 +46,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Transform\ArrayWriterState.cs" />
+    <Compile Include="Transform\AttributeWriterState.cs" />
+    <Compile Include="Transform\JsonAttribute.cs" />
+    <Compile Include="Transform\JsonWriterContext.cs" />
+    <Compile Include="Transform\JsonWriterState.cs" />
+    <Compile Include="Transform\ObjectWriterState.cs" />
+    <Compile Include="Transform\PropertyWriterState.cs" />
+    <Compile Include="Transform\ValueWriterState.cs" />
+    <Compile Include="Transform\XslJsonWriter.cs" />
     <Compile Include="XPath\JsonArrayTextItem.cs" />
     <Compile Include="XPath\JsonTextItem.cs" />
     <Compile Include="XPath\JsonRootTreeItem.cs" />
