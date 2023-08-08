@@ -15,9 +15,9 @@ namespace XPath2Json.XPath
 
         protected override void InitChildren()
         {
-            if (_children == null) {
-                _children = GetJObjectChildrens((JObject)_token);
-                InitWrappedChildren();
+            if (_wrappedChildren == null) {
+                var children = GetJObjectChildrens((JObject)_token);
+                InitWrappedChildren(children);
             }
             _childIndex = 0;
         }

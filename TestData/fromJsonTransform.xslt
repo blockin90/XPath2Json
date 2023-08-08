@@ -6,14 +6,13 @@
   <xsl:output method="xml" indent="no"/>
 
   <xsl:template match="/">
-    <!--
+    
     <test2>
       <xsl:value-of select="./field2/text()"/>
     </test2>
     <field1 xsi:nil="true" xsi:type="float"/>
     <emptyObject empty="true"/>
     <emptyStringElement />
-    -->
     <xsl:for-each select="./objArray">
       <objArray array="true">
         <field1 xsi:type="float">

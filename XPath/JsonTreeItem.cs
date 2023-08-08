@@ -10,7 +10,6 @@ namespace XPath2Json.XPath
     class JsonTreeItem : JsonItem
     {
         protected readonly JToken _token;
-        protected JToken[] _children = null;
         protected XPathItem[] _wrappedChildren = null;
         protected int _childIndex;
 
@@ -35,8 +34,8 @@ namespace XPath2Json.XPath
         public override XPathItem MoveToFirstChild()
         {
             InitChildren();
-            if (_children.Length > 0) {
-                return GetWrappedChild(_childIndex);
+            if (_wrappedChildren.Length > 0) {
+                return _wrappedChildren[_childIndex];
             }
             return null;
         }
@@ -46,26 +45,28 @@ namespace XPath2Json.XPath
             return null;
         }
 
-        static protected JToken[] GetJObjectChildrens(JObject obj)
+        static protected List<JToken> GetJObjectChildrens(JObject obj)
         {
             List<JToken> children = new List<JToken>();
-            foreach (var child in obj.Children().Cast<JProperty>()) {
+            foreach (var child in obj.Children()) {
                 if (child.First is JArray) {
                     children.AddRange(child.First.Children());
                 } else {
                     children.Add(child);
                 }
             }
-            return children.ToArray();
+            return children;
         }
 
         protected virtual void InitChildren()
         {
-            if (_children == null) {
+            if (_wrappedChildren == null) {
+                
+                List<JToken> children;
                 if (_token is JObject) { //для массивов
-                    _children = GetJObjectChildrens((JObject)_token);
+                    children = GetJObjectChildrens((JObject)_token);
                 } else if (_token is JProperty && _token.First is JObject) {
-                    List<JToken> children = new List<JToken>();
+                    children = new List<JToken>();
                     foreach (var child in _token.First.Children()) {
                         if (child is JArray) {
                             children.AddRange(child.Children());
@@ -73,22 +74,21 @@ namespace XPath2Json.XPath
                             children.Add(child);
                         }
                     }
-                    _children = children.ToArray();
                 } else if (_token is JProperty && _token.First is JArray) {
-                    _children = _token.First.Children().ToArray();
+                    children = _token.First.Children().ToList();
                 } else {
-                    _children = _token.Children().Cast<JProperty>().ToArray();
+                    children = _token.Children().ToList();
                 }
-                InitWrappedChildren();
+                InitWrappedChildren(children);
             }
             _childIndex = 0;
         }
 
-        protected void InitWrappedChildren()
+        protected void InitWrappedChildren(List<JToken> children)
         {
-            _wrappedChildren = new JsonItem[_children.Length];
-            for (int i = 0; i < _children.Length; ++i) {
-                var wrapped = CreateWrappedItem(_children[i]);
+            _wrappedChildren = new JsonItem[children.Count];
+            for (int i = 0; i < children.Count; ++i) {
+                var wrapped = CreateWrappedItem(children[i],this);
                 _wrappedChildren[i] = wrapped;
 
                 if (!_childrenFirstIndex.ContainsKey(wrapped.Name)) {
@@ -100,7 +100,7 @@ namespace XPath2Json.XPath
 
         public XPathItem MoveToChild(string localName, string namespaceURI)
         {
-            if(_children == null) {
+            if(_wrappedChildren == null) {
                 InitChildren();
                 _childIndex = 0;
             }
@@ -109,12 +109,8 @@ namespace XPath2Json.XPath
             }
             return null;
         }
-        protected XPathItem CreateWrappedItem(JToken child)
-        {
-            return CreateItem(child, this);
-        }
 
-        public static XPathItem CreateItem(JToken child, JsonItem parent)
+        public static XPathItem CreateWrappedItem(JToken child, JsonItem parent)
         {
             if (child is JValue) { //array
                 return new JsonArrayTextItem((JValue)child, parent);
@@ -140,25 +136,15 @@ namespace XPath2Json.XPath
             get
             {
                 InitChildren();
-                return _children.Length == 0;
+                return _wrappedChildren.Length == 0;
             }
-        }
-
-        XPathItem GetWrappedChild(int index)
-        {
-            return _wrappedChildren[index];
-            //if (wrappedChild == null) {
-            //    wrappedChild = CreateWrappedItem(_children[index]);
-            //    _wrappedChildren[index] = wrappedChild;
-            //}
-            //return wrappedChild;
         }
 
         public XPathItem GetNext()
         {
-            if (_childIndex >= _children.Length - 1)
+            if (_childIndex >= _wrappedChildren.Length - 1)
                 return null;
-            return GetWrappedChild(++_childIndex);
+            return _wrappedChildren[++_childIndex];
             
         }
 
@@ -166,7 +152,7 @@ namespace XPath2Json.XPath
         {
             if (_childIndex <= 0)
                 return null;
-            return CreateWrappedItem(_children[--_childIndex]);
+            return _wrappedChildren[--_childIndex];
         }
     }
 }
