@@ -1,15 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-		xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:user="urn:my-scripts">
-  <xsl:output method="html" indent="yes"/>
+		xmlns:msxsl="urn:schemas-microsoft-com:xslt" exclude-result-prefixes="msxsl user" 
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+                xmlns:user="urn:my-scripts">
+  <xsl:output method="xml" indent="no"/>
 
   <xsl:template match="/">
+    <!--
     <test2>
       <xsl:value-of select="./field2/text()"/>
     </test2>
     <field1 xsi:nil="true" xsi:type="float"/>
     <emptyObject empty="true"/>
     <emptyStringElement />
+    -->
     <xsl:for-each select="./objArray">
       <objArray array="true">
         <field1 xsi:type="float">

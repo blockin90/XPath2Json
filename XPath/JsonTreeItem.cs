@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 
 namespace XPath2Json.XPath
 {
@@ -12,6 +13,9 @@ namespace XPath2Json.XPath
         protected JToken[] _children = null;
         protected XPathItem[] _wrappedChildren = null;
         protected int _childIndex;
+
+        public Dictionary<string, int> _childrenFirstIndex = new Dictionary<string, int>(); //name -> index
+
 
         public JsonTreeItem(JToken token, XPathItem parent = null) : base(parent)
         {
@@ -75,13 +79,37 @@ namespace XPath2Json.XPath
                 } else {
                     _children = _token.Children().Cast<JProperty>().ToArray();
                 }
-
-                _wrappedChildren = new JsonItem[_children.Length];
+                InitWrappedChildren();
             }
             _childIndex = 0;
         }
 
-        protected XPathItem CreateItem(JToken child)
+        protected void InitWrappedChildren()
+        {
+            _wrappedChildren = new JsonItem[_children.Length];
+            for (int i = 0; i < _children.Length; ++i) {
+                var wrapped = CreateWrappedItem(_children[i]);
+                _wrappedChildren[i] = wrapped;
+
+                if (!_childrenFirstIndex.ContainsKey(wrapped.Name)) {
+                    _childrenFirstIndex[wrapped.Name] = i;
+                }
+            }
+
+        }
+
+        public XPathItem MoveToChild(string localName, string namespaceURI)
+        {
+            if(_children == null) {
+                InitChildren();
+                _childIndex = 0;
+            }
+            if( _childrenFirstIndex.TryGetValue(localName, out _childIndex)) {
+                return _wrappedChildren[_childIndex];
+            }
+            return null;
+        }
+        protected XPathItem CreateWrappedItem(JToken child)
         {
             return CreateItem(child, this);
         }
@@ -118,12 +146,12 @@ namespace XPath2Json.XPath
 
         XPathItem GetWrappedChild(int index)
         {
-            var wrappedChild = _wrappedChildren[index];
-            if (wrappedChild == null) {
-                wrappedChild = CreateItem(_children[index]);
-                _wrappedChildren[index] = wrappedChild;
-            }
-            return wrappedChild;
+            return _wrappedChildren[index];
+            //if (wrappedChild == null) {
+            //    wrappedChild = CreateWrappedItem(_children[index]);
+            //    _wrappedChildren[index] = wrappedChild;
+            //}
+            //return wrappedChild;
         }
 
         public XPathItem GetNext()
@@ -138,7 +166,7 @@ namespace XPath2Json.XPath
         {
             if (_childIndex <= 0)
                 return null;
-            return CreateItem(_children[--_childIndex]);
+            return CreateWrappedItem(_children[--_childIndex]);
         }
     }
 }

@@ -78,6 +78,7 @@
   <ItemGroup>
     <None Include="TestData\fromJsonTransform.xslt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +94,7 @@
   <ItemGroup>
     <None Include="TestData\fromXmlTransform_NoRoot.xslt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

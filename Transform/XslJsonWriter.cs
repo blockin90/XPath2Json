@@ -33,9 +33,6 @@ namespace XPath2Json.Transform
             while (context.CurrentState != null) {
                 if (!(context.CurrentState is PropertyWriterState)) {
                     context.CurrentState.WriteEndElement();
-
-                    //context.JsonTextWriter.WriteEnd();
-                    //context.MoveToPreviousState();
                 }
             }
             context.JsonTextWriter.Flush();

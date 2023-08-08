@@ -151,6 +151,26 @@ namespace XPath2Json.XPath
 			if (namespaceURI != string.Empty) return false;
 			return MoveToItem(_rootItem.MoveToAttribute(localName));
 		}
+        public override string GetNamespace(string name)
+        {
+            return base.GetNamespace(name);
+        }
+        public override bool MoveToChild(string localName, string namespaceURI)
+        {
+			var treeItem = this._rootItem as JsonTreeItem;
+			if(treeItem != null) {
+				return MoveToItem(treeItem.MoveToChild(localName, namespaceURI));
+			}
+            return base.MoveToChild(localName, namespaceURI);
+        }
+        public override bool MoveToFollowing(string localName, string namespaceURI)
+        {
+            return base.MoveToFollowing(localName, namespaceURI);
+        }
+        public override bool MoveToFollowing(string localName, string namespaceURI, XPathNavigator end)
+        {
+            return base.MoveToFollowing(localName, namespaceURI, end);
+        }
         public override string OuterXml 
 		{
 			get

@@ -32,6 +32,7 @@ namespace XPath2Json.XPath
 		{
 			get { return JToken.Path; }
 		}
+		string name = null;
 
 		/// <summary>
 		/// node's local name
@@ -40,21 +41,21 @@ namespace XPath2Json.XPath
 		{
 			get 
 			{
-                string name;
-                if (JToken.Parent is JArray) {
-					name = ((JProperty)JToken.Parent.Parent).Name;
-                } else if(JToken is JObject) {
-					name = ((JProperty)JToken.Parent).Name;
-				} else if(JToken is JProperty) {
-					name = ((JProperty)JToken).Name;
-				} else {					
-					Console.WriteLine("exception");
-					throw new NotImplementedException();
-                } 
+				if (name == null) {
+					if (JToken.Parent is JArray) {
+						name = ((JProperty)JToken.Parent.Parent).Name;
+					} else if (JToken is JObject) {
+						name = ((JProperty)JToken.Parent).Name;
+					} else if (JToken is JProperty) {
+						name = ((JProperty)JToken).Name;
+					} else {
+						Console.WriteLine("exception");
+						throw new NotImplementedException();
+					}
 
-                Debug.WriteLine(name);
-
-                return XmlConvert.EncodeLocalName(name); 
+//					Debug.WriteLine(name);
+				}
+				return name;
 			}
 		}
 

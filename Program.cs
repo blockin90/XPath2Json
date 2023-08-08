@@ -21,12 +21,10 @@ namespace XPath2Json
         private static void ApplyJsonXslTransformation(XPathNavigator navigator, XslCompiledTransform xsl)
         {
             var xargs = new XsltArgumentList();
-            xargs.XsltMessageEncountered +=
-                (target, ea) => Console.Error.WriteLine(ea.Message);
             using (var ms = new MemoryStream())
             using (var sw = new StreamWriter(ms)) {
 #if DEBUG
-                var writer = new XslJsonWriter();
+                var writer = new XslJsonWriter(sw);
 #else
                 var writer = new XslJsonWriter(sw);
 #endif
@@ -68,8 +66,10 @@ namespace XPath2Json
                 jsonSerializer.Serialize(jsonWriter, doc.DocumentElement);
                 
                 jsonWriter.Flush();
-                //ms.Position = 0;
-                //Console.WriteLine(Encoding.UTF8.GetString(ms.ToArray()));
+#if DEBUG
+                ms.Position = 0;
+                Console.WriteLine(Encoding.UTF8.GetString(ms.ToArray()));
+#endif
             }
 
             xmlDocMemoryStream.Dispose();
@@ -77,9 +77,11 @@ namespace XPath2Json
 
         static void Main(string[] args)
         {
+            int count = 1000000;
             var xml = File.ReadAllText(@"TestData\data.xml");
             
             var xmlXsl = new XslCompiledTransform();
+            
             xmlXsl.Load(@"TestData\fromXmlTransform.xslt", XsltSettings.TrustedXslt, new XmlUrlResolver());
 
             var xmlNoRootXsl = new XslCompiledTransform();
@@ -94,7 +96,7 @@ namespace XPath2Json
             Stopwatch sw = new Stopwatch();
             sw.Start();
 
-            for (int i = 0; i < 1000000; i++) {
+            for (int i = 0; i < count; i++) {
                 var doc = new XmlDocument();
                 doc.LoadXml(xml);
 
@@ -104,7 +106,7 @@ namespace XPath2Json
             Console.WriteLine("xml->xml->json:" + sw.ElapsedMilliseconds / 1000);
 
             sw.Restart();
-            for (int i = 0; i < 1000000; i++) {
+            for (int i = 0; i < count; i++) {
                 var doc = new XmlDocument();
                 doc.LoadXml(xml);
                 ApplyJsonXslTransformation(doc.CreateNavigator(), xmlNoRootXsl);
@@ -114,7 +116,8 @@ namespace XPath2Json
 
             sw.Restart();
 
-            for (int i = 0; i < 1000000; i++) {
+            for (int i = 0; i < count; i++) {
+
                 var obj = JsonConvert.DeserializeObject<JObject>(jsonFile, new JsonSerializerSettings()
                 {
                     FloatParseHandling = FloatParseHandling.Decimal
@@ -123,7 +126,7 @@ namespace XPath2Json
                 ApplyJsonXslTransformation(nav, jsonXsl);
             }
             sw.Stop();
-            Console.WriteLine("json->json:" + sw.ElapsedMilliseconds / 1000);
+            Console.WriteLine("json->json:" + sw.ElapsedMilliseconds / 1000);            
         }
     }
 }

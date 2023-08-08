@@ -17,7 +17,7 @@ namespace XPath2Json.XPath
         {
             if (_children == null) {
                 _children = GetJObjectChildrens((JObject)_token);
-                _wrappedChildren = new XPathItem[_children.Length];
+                InitWrappedChildren();
             }
             _childIndex = 0;
         }

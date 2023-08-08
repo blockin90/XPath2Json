@@ -41,8 +41,12 @@ namespace XPath2Json.Transform
             if ((_attribute & JsonAttribute.Array) != 0) {
                 _context.MoveToNextState(new ArrayWriterState(ParentState, _localName, type))
                     .WriteString(text);
-            } else { 
-                WriteValue(text);
+            } else {
+                if (type != JTokenType.String && string.IsNullOrEmpty(text)) {
+                    _context.JsonTextWriter.WriteNull();
+                } else {
+                    WriteValue(text);
+                }
                 _isValueWriten = true;
             }
         }
